@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Serialization;
 
 namespace ListasXML
 {
@@ -23,14 +24,16 @@ namespace ListasXML
 
         private void AbrirButton_Click(object sender, EventArgs e)
         {
+            // Inicializamos el dialog para abrir un archivo
             Stream stream = null;
-            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+            OpenFileDialog openFileDialog1 = new OpenFileDialog
+            {
+                Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*",
+                FilterIndex = 2,
+                RestoreDirectory = true
+            };
 
-            openFileDialog1.InitialDirectory = "c:\\";
-            openFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
-            openFileDialog1.FilterIndex = 2;
-            openFileDialog1.RestoreDirectory = true;
-
+            // Si la respuesta del dialogo es correcta intentamos deserializarlo
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 try
@@ -38,9 +41,19 @@ namespace ListasXML
                     if ((stream = openFileDialog1.OpenFile()) != null)
                     {
                         using (stream)
-                        {                            
-                            var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-                            estudiantes = (List<Estudiante>)bformatter.Deserialize(stream);
+                        {
+                            // Deserializamos en base a la opcion marcada
+                            if (BinarioRadioButton.Checked)
+                            {
+                                var binarySerializer = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                                estudiantes = (List<Estudiante>)binarySerializer.Deserialize(stream);
+                            }
+                            else if (XmlRadioButton.Checked)
+                            {
+                                var xmlSerializer = new XmlSerializer(typeof(List<Estudiante>));
+                                estudiantes = (List<Estudiante>)xmlSerializer.Deserialize(stream);
+                            }
+
                             ActualizarGrid();
                         }
                     }
@@ -52,28 +65,48 @@ namespace ListasXML
             }
         }
 
+        /// <summary>
+        /// Guarda la lista de estudiantes en un archivo.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void GuardarButton_Click(object sender, EventArgs e)
         {
-            // Displays a SaveFileDialog so the user can save the Image  
-            // assigned to Button2.  
-            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-            saveFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
-            saveFileDialog1.Title = "Guardar Archivo";
+            // Inicializamos el dialogo para guardar el archivo
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog
+            {
+                Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*",
+                Title = "Guardar Archivo"
+            };
+
             saveFileDialog1.ShowDialog();
 
-            // If the file name is not an empty string open it for saving.  
+            // Si el nombre del archivo no esta vacio procedemos a guardarlo.
             if (saveFileDialog1.FileName != "")
             { 
-                System.IO.FileStream fs =
-                   (System.IO.FileStream)saveFileDialog1.OpenFile();
+                System.IO.FileStream fs = (System.IO.FileStream)saveFileDialog1.OpenFile();
 
-                var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-                bformatter.Serialize(fs, estudiantes);
+                // Serializamos en base a la opcion seleccionada.
+                if (BinarioRadioButton.Checked)
+                {
+                    var binarySerializer = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                    binarySerializer.Serialize(fs, estudiantes);
+                }
+                else if (XmlRadioButton.Checked)
+                {
+                    var xmlSerializer = new XmlSerializer(typeof(List<Estudiante>));
+                    xmlSerializer.Serialize(fs, estudiantes);
+                }                               
 
                 fs.Close();
             }
         }
 
+        /// <summary>
+        /// Agrega un usuario a la lista de usuarios
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ActualizarButton_Click(object sender, EventArgs e)
         {
             Estudiante estudiante = new Estudiante

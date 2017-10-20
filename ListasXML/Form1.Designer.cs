@@ -37,6 +37,8 @@
             this.ActualizarButton = new System.Windows.Forms.Button();
             this.AbrirButton = new System.Windows.Forms.Button();
             this.GuardarButton = new System.Windows.Forms.Button();
+            this.BinarioRadioButton = new System.Windows.Forms.RadioButton();
+            this.XmlRadioButton = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.EstudiantesGridView)).BeginInit();
             this.gbEstudiantes.SuspendLayout();
             this.SuspendLayout();
@@ -125,11 +127,35 @@
             this.GuardarButton.UseVisualStyleBackColor = true;
             this.GuardarButton.Click += new System.EventHandler(this.GuardarButton_Click);
             // 
+            // BinarioRadioButton
+            // 
+            this.BinarioRadioButton.AutoSize = true;
+            this.BinarioRadioButton.Checked = true;
+            this.BinarioRadioButton.Location = new System.Drawing.Point(196, 15);
+            this.BinarioRadioButton.Name = "BinarioRadioButton";
+            this.BinarioRadioButton.Size = new System.Drawing.Size(57, 17);
+            this.BinarioRadioButton.TabIndex = 4;
+            this.BinarioRadioButton.TabStop = true;
+            this.BinarioRadioButton.Text = "Binario";
+            this.BinarioRadioButton.UseVisualStyleBackColor = true;
+            // 
+            // XmlRadioButton
+            // 
+            this.XmlRadioButton.AutoSize = true;
+            this.XmlRadioButton.Location = new System.Drawing.Point(259, 15);
+            this.XmlRadioButton.Name = "XmlRadioButton";
+            this.XmlRadioButton.Size = new System.Drawing.Size(47, 17);
+            this.XmlRadioButton.TabIndex = 5;
+            this.XmlRadioButton.Text = "XML";
+            this.XmlRadioButton.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(704, 501);
+            this.Controls.Add(this.XmlRadioButton);
+            this.Controls.Add(this.BinarioRadioButton);
             this.Controls.Add(this.GuardarButton);
             this.Controls.Add(this.AbrirButton);
             this.Controls.Add(this.gbEstudiantes);
@@ -140,6 +166,7 @@
             this.gbEstudiantes.ResumeLayout(false);
             this.gbEstudiantes.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -154,6 +181,8 @@
         private System.Windows.Forms.Button ActualizarButton;
         private System.Windows.Forms.Button AbrirButton;
         private System.Windows.Forms.Button GuardarButton;
+        private System.Windows.Forms.RadioButton BinarioRadioButton;
+        private System.Windows.Forms.RadioButton XmlRadioButton;
     }
 }
 
